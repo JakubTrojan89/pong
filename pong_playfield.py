@@ -28,10 +28,30 @@ Palette_1_position = (350, 360) # palette primary position written in tuple
 Palette1 = pygame.Surface((Palette_width, Palette_height))
 Palette1.fill(BLUE)
 
-# setting the square with the palette in a primary position
+# setting the rectangle with the palette in a primary position
 Palette1_rectangle = Palette1.get_rect()
 Palette1_rectangle.x = Palette_1_position[0]
 Palette1_rectangle.y = Palette_1_position[1]
+
+# creating the ball
+Ball_width = 20
+Ball_height = 20
+Ball_speed_x = 6 # horizontal speed
+Ball_speed_y = 6 # vertical speed
+GREEN = (0, 255, 0)
+
+# creating the ball surface, drawing the ball and filling it with color
+Ball = pygame.Surface((Ball_width, Ball_height), pygame.SRCALPHA, 32).convert_alpha()
+pygame.draw.ellipse(Ball, GREEN, (0, 0, Ball_width, Ball_height))
+
+# setting up the rectangle holding the ball in a primary position
+Ball_rectangle = Ball.get_rect()
+Ball_rectangle.x = Playfield_width / 2
+Ball_rectangle.y = Playfield_height / 2
+
+# setting up the animation
+FPS = 30 # frames per second for low quality graphics
+fps_clock = pygame.time.Clock() # in-game clock
 
 # main loop
 while True:    # handling player-generated events
