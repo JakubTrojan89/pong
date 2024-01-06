@@ -76,11 +76,40 @@ while True:    # handling player-generated events
             # update the position of the palette
             Palette1_rectangle.x = shift
 
+    # ball movement
+    # move the ball after the events unfold
+    Ball_rectangle.move_ip(Ball_speed_x, Ball_speed_y)
+
+    # if the ball leaves the playfield  on the left/right - change the direction of the horizontal ball movement
+    if Ball_rectangle.right >= Playfield_width:
+        Ball_speed_x *= -1
+    if Ball_rectangle.left <= 0:
+        Ball_speed_x *= -1
+
+    if Ball_rectangle.top <= 0: # ball ran through the top
+        Ball_speed_y *= -1  # change the movement direction from the top
+
+    if Ball_rectangle.bottom >= Playfield_height: # ball ran down
+        Ball_rectangle.x = Playfield_width / 2 # starting from the middle
+        Ball_rectangle.y = Playfield_height / 2
+
+    # if the ball touches the players palette, shift it to another direction
+    if Ball_rectangle.colliderect(Palette1_rectangle):
+        Ball_speed_y += -1
+        # deny the ball form penetrating the palette
+        Ball_rectangle.bottom = Palette1_rectangle.top
+
     # drawing objects
     game_window.fill(LT_BLUE) # window color
 
     # draw the palette inside the game window
     game_window.blit(Palette1, Palette1_rectangle)
 
+    # draw the ball
+    game_window.blit(Ball, Ball_rectangle)
+
     # update game window and display it
     pygame.display.update()
+
+    # update the gamer clock
+    fps_clock.tick(FPS)
