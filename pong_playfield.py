@@ -69,6 +69,23 @@ PaletteAI_rectangle.y = Palatte_AI_position[1]
 # AI palette speed
 Speed_AI = 5
 
+# Text, variables holding points and text-information
+Points_p1 = "0"
+Points_AI = "0"
+fontObj = pygame.font.Font('freesansbold.ttf', 64) # in-game text font
+
+def display_points1():
+    text1 = fontObj.render(Points_p1, True, (0, 0, 0))
+    text_rectangle1 = text1.get_rect()
+    text_rectangle1.center = (Playfield_width / 2, Playfield_height / 2)
+    game_window.blit(text1, text_rectangle1)
+
+def display_pointsAI():
+    textAI = fontObj.render(Points_AI, True, (0, 0, 0))
+    text_rectangleAI = textAI.get_rect()
+    text_rectangleAI.center = (Playfield_width / 2, Playfield_height / 2)
+    game_window.blit(textAI, text_rectangleAI)
+
 # main loop
 while True:    # handling player-generated events
     for event in pygame.event.get():  # capture window close
@@ -97,19 +114,19 @@ while True:    # handling player-generated events
     Ball_rectangle.move_ip(Ball_speed_x, Ball_speed_y)
 
     # if the ball leaves the playfield  on the left/right - change the direction of the horizontal ball movement
-    if Ball_rectangle.right >= Playfield_width:
-        Ball_speed_x *= -1
-    if Ball_rectangle.left <= 0:
+    if Ball_rectangle.right >= Playfield_width or Ball_rectangle.left <= 0:
         Ball_speed_x *= -1
 
     if Ball_rectangle.top <= 0: # ball ran through the top
         Ball_speed_y *= -1 # change the movement direction from the top
         Ball_rectangle.x = Playfield_width / 2
         Ball_rectangle.y = Playfield_height / 2
+        Points_p1 = str(int(Points_AI) + 1)
 
     if Ball_rectangle.bottom >= Playfield_height: # ball ran down
         Ball_rectangle.x = Playfield_width / 2 # starting from the middle
         Ball_rectangle.y = Playfield_height / 2
+        Points_AI = str(int(Points_p1) + 1)
 
     # AI
     # when the ball runs to the right, shift the palette in the same direction, elif to the left
@@ -125,11 +142,14 @@ while True:    # handling player-generated events
 
     # if the ball touches the players palette, shift it to another direction
     if Ball_rectangle.colliderect(Palette1_rectangle):
-        Ball_speed_y += -1 # deny the ball form penetrating the palette
+        Ball_speed_y *= -1 # deny the ball form penetrating the palette
         Ball_rectangle.top = Palette1_rectangle.bottom
 
     # drawing objects
     game_window.fill(LT_BLUE) # window color
+
+    display_points1() # display players points
+    display_pointsAI() # display AI points
 
     # draw the palette inside the game window
     game_window.blit(Palette1, Palette1_rectangle)
