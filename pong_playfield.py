@@ -53,6 +53,22 @@ Ball_rectangle.y = Playfield_height / 2
 FPS = 30 # frames per second for low quality graphics
 fps_clock = pygame.time.Clock() # in-game clock
 
+# AI Palette
+RED = (255, 0,  0)
+Palatte_AI_position = (350, 20) # AI Palette primary position
+
+# setting up th palette, filling it with color
+PaletteAI = pygame.Surface((Palette_width, Palette_height))
+PaletteAI.fill(RED)
+
+# setting up the rectangle with the palette in a primary position
+PaletteAI_rect = PaletteAI.get_rect()
+PaletteAI_rect.x = Palatte_AI_position[0]
+PaletteAI_rect.y = Palatte_AI_position[1]
+
+# AI palette speed
+Speed_AI = 5
+
 # main loop
 while True:    # handling player-generated events
     for event in pygame.event.get():  # capture window close
