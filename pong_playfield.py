@@ -62,9 +62,9 @@ PaletteAI = pygame.Surface((Palette_width, Palette_height))
 PaletteAI.fill(RED)
 
 # setting up the rectangle with the palette in a primary position
-PaletteAI_rect = PaletteAI.get_rect()
-PaletteAI_rect.x = Palatte_AI_position[0]
-PaletteAI_rect.y = Palatte_AI_position[1]
+PaletteAI_rectangle = PaletteAI.get_rect()
+PaletteAI_rectangle.x = Palatte_AI_position[0]
+PaletteAI_rectangle.y = Palatte_AI_position[1]
 
 # AI palette speed
 Speed_AI = 5
@@ -103,23 +103,37 @@ while True:    # handling player-generated events
         Ball_speed_x *= -1
 
     if Ball_rectangle.top <= 0: # ball ran through the top
-        Ball_speed_y *= -1  # change the movement direction from the top
+        Ball_speed_y *= -1 # change the movement direction from the top
+        Ball_rectangle.x = Playfield_width / 2
+        Ball_rectangle.y = Playfield_height / 2
 
     if Ball_rectangle.bottom >= Playfield_height: # ball ran down
         Ball_rectangle.x = Playfield_width / 2 # starting from the middle
         Ball_rectangle.y = Playfield_height / 2
 
+    # AI
+    # when the ball runs to the right, shift the palette in the same direction, elif to the left
+    if Ball_rectangle.centerx > PaletteAI_rectangle.centerx:
+        PaletteAI_rectangle.x += Speed_AI
+    elif Ball_rectangle.centerx < PaletteAI_rectangle.centerx:
+        PaletteAI_rectangle.x -= Speed_AI
+
+    # if the ball touches the palette AI, change the balls direction
+    if Ball_rectangle.colliderect(PaletteAI_rectangle):
+        Ball_speed_y *= -1
+        Ball_rectangle.top = PaletteAI_rectangle.bottom
+
     # if the ball touches the players palette, shift it to another direction
     if Ball_rectangle.colliderect(Palette1_rectangle):
-        Ball_speed_y += -1
-        # deny the ball form penetrating the palette
-        Ball_rectangle.bottom = Palette1_rectangle.top
+        Ball_speed_y += -1 # deny the ball form penetrating the palette
+        Ball_rectangle.top = Palette1_rectangle.bottom
 
     # drawing objects
     game_window.fill(LT_BLUE) # window color
 
     # draw the palette inside the game window
     game_window.blit(Palette1, Palette1_rectangle)
+    game_window.blit(PaletteAI, PaletteAI_rectangle)
 
     # draw the ball
     game_window.blit(Ball, Ball_rectangle)
