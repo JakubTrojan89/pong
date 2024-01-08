@@ -77,13 +77,13 @@ fontObj = pygame.font.Font('freesansbold.ttf', 64) # in-game text font
 def display_points1():
     text1 = fontObj.render(Points_p1, True, (0, 0, 0))
     text_rectangle1 = text1.get_rect()
-    text_rectangle1.center = (Playfield_width / 2, Playfield_height / 2)
+    text_rectangle1.bottomleft = (50, Playfield_height - 10)
     game_window.blit(text1, text_rectangle1)
 
 def display_pointsAI():
     textAI = fontObj.render(Points_AI, True, (0, 0, 0))
     text_rectangleAI = textAI.get_rect()
-    text_rectangleAI.center = (Playfield_width / 2, Playfield_height / 2)
+    text_rectangleAI.topright = (Playfield_width - 50, 10)
     game_window.blit(textAI, text_rectangleAI)
 
 # main loop
@@ -143,7 +143,7 @@ while True:    # handling player-generated events
     # if the ball touches the players palette, shift it to another direction
     if Ball_rectangle.colliderect(Palette1_rectangle):
         Ball_speed_y *= -1 # deny the ball form penetrating the palette
-        Ball_rectangle.top = Palette1_rectangle.bottom
+        Ball_rectangle.bottom = Palette1_rectangle.top
 
     # drawing objects
     game_window.fill(LT_BLUE) # window color
